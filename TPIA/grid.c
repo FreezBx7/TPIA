@@ -6,7 +6,7 @@ GRID init_grid(int size_grid) {
     if(size_grid > 0 && (size_grid%2 == 0)) {
         g.size_grid = size_grid;
     } else {
-        printf("size_grid uncorrect, we choose default value");
+        printf("size_grid uncorrect, we choose default value\n");
         g.size_grid = 8;
     }
     g.board = (int **)calloc(g.size_grid, sizeof(int *));
@@ -42,4 +42,14 @@ GRID pointCounter (GRID g) {
         }
     }
     return g;
+}
+
+void print_GRID(GRID g) {
+    for(int i = 0; i<g.size_grid; i++) {
+        for(int j = 0; j<g.size_grid; j++) {
+            printf("|%c", g.board[i][j]);
+        }
+        printf("|\n");
+    }
+    printf("-----------------------")
 }
