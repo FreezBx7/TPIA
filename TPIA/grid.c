@@ -82,20 +82,11 @@ GRID copieGRID(GRID gModel) {
             g.board[i][j] = gModel.board[i][j];
         }
     }
-
     return g;
 }
 
 void whereCanIPlay(GRID g, char myColor) {
-    char adversaryColor;
-    if( myColor == 'W') {
-        adversaryColor = 'B';
-    } else {
-        adversaryColor = 'W';
-    }
-
     GRID gTemp = copieGRID(g);
-    print_GRID(gTemp);
 
     for(int i = 1; i<g.size_grid-1; i++) {
         for(int j = 1; j<g.size_grid-1; j++) {
@@ -116,14 +107,110 @@ void isNeigbourAdversary(GRID g, int xPos, int yPos, char myColor) {
     } else {
         adversaryColor = 'W';
     }
+    printf("%d, %d : %c\n", xPos, yPos, g.board[xPos][yPos]);
 
-    for(int i = xPos - 1; i< xPos + 1; i++) {
-        for(int j = yPos - 1; j < yPos; j++ ) {
+    for(int i = xPos - 1; i<= xPos + 1; i++) {
+        for(int j = yPos - 1; j <= yPos+1; j++ ) {
+
             if(g.board[i][j] == adversaryColor) {
-                printf("%d , %d (%c) is adversary from %d, %d (%c)\n", i,j,g.board[i][j],xPos,yPos, g.board[xPos][yPos]);
+                DIRECTION dir = defineDIRECTION(xPos,yPos,i,j);
+                canIPlay(g,dir,xPos,yPos,myColor);
             }
         }
     }
+}
+
+DIRECTION defineDIRECTION(int xPos, int yPos, int i, int j){
+    DIRECTION dir = NULL;
+    if(xPos - i == 1) {
+
+        if(yPos - j == 1) {
+            dir = NE;
+        } else {
+            if(yPos - j == -1) {
+                dir = NW;
+            } else {
+                if(yPos == 0) {
+                    dir = NORTH;
+                } else {
+                    printf("Error define Direction() %d,%d / %d,%d\n", xPos, yPos, i, j);
+                }
+            }
+        }
+
+    } else {
+        if(xPos - i == -1) {
+
+                if(yPos - j == 1) {
+                    dir = SE;
+                } else {
+                    if(yPos - j == -1) {
+                        dir = SW;
+                    } else {
+                        if(yPos == 0) {
+                            dir = SOUTH;
+                        } else {
+                            printf("Error define Direction() %d,%d / %d,%d\n", xPos, yPos, i, j);
+                        }
+                    }
+                }
+
+        } else {
+            if(xPos - i == 0) {
+                    if(yPos - j == 1) {
+                        dir = EAST;
+                    } else {
+                        if(yPos - j == -1) {
+                            dir = WEST;
+                        } else {
+                            printf("Error define Direction() %d,%d / %d,%d\n", xPos, yPos, i, j);
+                        }
+                    }
+
+            } else {
+             printf("Error define Direction() %d,%d / %d,%d\n", xPos, yPos, i, j);
+            }
+        }
+    }
+    return dir;
+}
+
+void canIPlay(GRID g, DIRECTION dir, int xPos, int yPos, char myColor) {
+    char adversaryColor;
+    if( myColor == 'W') {
+        adversaryColor = 'B';
+    } else {
+        adversaryColor = 'W';
+    }
+
+    if(g.board[xPos][yPos] == adversaryColor){
+        // Go ahead
+
+        switch(dir)
+        {
+            case NORTH : printf("North\n"); break;
+            case SOUTH : printf("South\n"); break;
+            case EAST : printf("East\n"); break;
+            case WEST : printf("West\n"); break;
+            case NE : printf("North East\n"); break;
+            case NW : printf("North West\n"); break;
+            case SE : printf("South East\n"); break;
+            case SW : printf("South West\n"); break;
+            default : printf("Erreur"); break;
+
+        }
+    } else {
+        if(g.board[xPos][yPos] == myColor) {
+            //Vant play here it's my color
+            printf("Cant play its my color\n");
+        } else {
+            if(g.board[xPos][yPos] == '\0'){
+                printf("%d,%d is a Possibilitie\n", xPos, yPos);
+            }
+            printf("Error canIplay() %d, %d\n", xPos, yPos);
+        }
+    }
+
 }
 
 
