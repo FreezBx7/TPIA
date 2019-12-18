@@ -5,12 +5,14 @@ typedef struct {
     int size_grid;
     int nb_white;
     int nb_black;
-    int** board;
+    char** board;
 } GRID;
 
 GRID init_grid(int size_grid);
 
 GRID pointCounter (GRID g);
+
+void print_GRID(GRID g);
 
 
 #endif // GRID_H_INCLUDED
