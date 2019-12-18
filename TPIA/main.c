@@ -7,5 +7,8 @@ int main()
     printf("Hello world!\n");
     GRID g = init_grid(6);
     print_GRID(g);
+
+
+
     return 0;
 }
