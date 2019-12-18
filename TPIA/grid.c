@@ -3,9 +3,10 @@
 #include <assert.h>
 #include <stdio.h>
 
-GRID init_grid(int size_grid) {
-    GRID g;
-    if(size_grid > 0 && (size_grid%2 == 0)) {
+
+GRID reservationMemoire(int size_grid) {
+     GRID g;
+     if(size_grid > 0 && (size_grid%2 == 0)) {
         g.size_grid = size_grid + 2;
     } else {
         printf("size_grid uncorrect, we choose default value\n");
@@ -17,6 +18,12 @@ GRID init_grid(int size_grid) {
         g.board[i] = (char *)calloc(g.size_grid, sizeof(char));
         assert(g.board[i] != NULL);
     }
+    return g;
+}
+
+GRID init_grid(int size_grid) {
+    GRID g = reservationMemoire(size_grid);
+
     g.nb_white = 0;
     g.nb_black = 0;
 
@@ -26,16 +33,13 @@ GRID init_grid(int size_grid) {
     g.board[middle][middle+1] = 'B';
     g.board[middle+1][middle] = 'B';
 
-    printf("Put the middle\n");
 
     for(int k = 0; k<g.size_grid; k++) {
-        printf("For %d\n", k);
         g.board[0][k] = 'N';
         g.board[k][0] = 'N';
         g.board[g.size_grid-1][k] = 'N';
         g.board[k][g.size_grid-1] = 'N';
     }
-    printf("Put the contour\n");
     g = pointCounter(g);
     return g;
 }
@@ -54,7 +58,6 @@ GRID pointCounter (GRID g) {
             }
         }
     }
-    printf("Count all points\n");
     return g;
 }
 
@@ -69,8 +72,60 @@ void print_GRID(GRID g) {
         }
         printf("|\n");
     }
-    printf("-----------------------");
+    printf("-----------------------\n");
 }
+
+GRID copieGRID(GRID gModel) {
+    GRID g = reservationMemoire(gModel.size_grid - 2);
+    for(int i = 0; i<gModel.size_grid; i++) {
+        for(int j = 0; j<gModel.size_grid; j++) {
+            g.board[i][j] = gModel.board[i][j];
+        }
+    }
+
+    return g;
+}
+
+void whereCanIPlay(GRID g, char myColor) {
+    char adversaryColor;
+    if( myColor == 'W') {
+        adversaryColor = 'B';
+    } else {
+        adversaryColor = 'W';
+    }
+
+    GRID gTemp = copieGRID(g);
+    print_GRID(gTemp);
+
+    for(int i = 1; i<g.size_grid-1; i++) {
+        for(int j = 1; j<g.size_grid-1; j++) {
+                if(g.board[i][j] == myColor) {
+                    isNeigbourAdversary(gTemp,i,j,myColor);
+                }
+
+        }
+    }
+
+
+}
+
+void isNeigbourAdversary(GRID g, int xPos, int yPos, char myColor) {
+    char adversaryColor;
+    if( myColor == 'W') {
+        adversaryColor = 'B';
+    } else {
+        adversaryColor = 'W';
+    }
+
+    for(int i = xPos - 1; i< xPos + 1; i++) {
+        for(int j = yPos - 1; j < yPos; j++ ) {
+            if(g.board[i][j] == adversaryColor) {
+                printf("%d , %d (%c) is adversary from %d, %d (%c)\n", i,j,g.board[i][j],xPos,yPos, g.board[xPos][yPos]);
+            }
+        }
+    }
+}
+
 
 /*void whereCanIPlay(GRID g, char myColor) {
     //char adversaryColor;
