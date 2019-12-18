@@ -4,10 +4,11 @@
 	<stdlib.h>
 	"grid.h"
 
-1576657090 source:c:\users\croch\onedrive\bureau\tpia\tpia\grid.c
+1576660526 source:c:\users\croch\onedrive\bureau\tpia\tpia\grid.c
 	"grid.h"
 	<stdlib.h>
 	<assert.h>
+	<stdio.h>
 
 1576656840 c:\users\croch\onedrive\bureau\tpia\tpia\grid.h
 

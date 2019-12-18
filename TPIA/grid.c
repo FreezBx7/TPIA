@@ -6,34 +6,36 @@
 GRID init_grid(int size_grid) {
     GRID g;
     if(size_grid > 0 && (size_grid%2 == 0)) {
-        g.size_grid = size_grid;
+        g.size_grid = size_grid + 2;
     } else {
         printf("size_grid uncorrect, we choose default value\n");
-        g.size_grid = 8;
+        g.size_grid = 10;
     }
-    g.board = (char **)calloc(g.size_grid + 2, sizeof(char *));
+    g.board = (char **)calloc(g.size_grid, sizeof(char *));
     assert(g.board != NULL);
     for(int i = 0; i < g.size_grid; i++) {
-        g.board[i] = (char *)calloc(g.size_grid +2, sizeof(char));
+        g.board[i] = (char *)calloc(g.size_grid, sizeof(char));
         assert(g.board[i] != NULL);
     }
     g.nb_white = 0;
     g.nb_black = 0;
 
-    int middle = (int) g.size_grid/2;
+    int middle = (int) (g.size_grid/2)-1;
     g.board[middle][middle] = 'W';
     g.board[middle+1][middle+1] = 'W';
     g.board[middle][middle+1] = 'B';
     g.board[middle+1][middle] = 'B';
 
-    for(int k = 0; k<g.size_grid+2; k++) {
+    printf("Put the middle\n");
+
+    for(int k = 0; k<g.size_grid; k++) {
+        printf("For %d\n", k);
         g.board[0][k] = 'N';
         g.board[k][0] = 'N';
-        g.board[g.size_grid + 2][k] = 'N';
-        g.board[k][g.size_grid + 2] = 'N';
+        g.board[g.size_grid-1][k] = 'N';
+        g.board[k][g.size_grid-1] = 'N';
     }
-
-
+    printf("Put the contour\n");
     g = pointCounter(g);
     return g;
 }
@@ -41,8 +43,8 @@ GRID init_grid(int size_grid) {
 GRID pointCounter (GRID g) {
     g.nb_white = 0;
     g.nb_black = 0;
-    for(int i = 1; i < g.size_grid + 1; i++) {
-        for(int j = 1; j < g.size_grid + 1; j++) {
+    for(int i = 0; i < g.size_grid; i++) {
+        for(int j = 0; j < g.size_grid; j++) {
             if(g.board[i][j] == 'B') {
                 g.nb_black++;
             } else {
@@ -52,6 +54,7 @@ GRID pointCounter (GRID g) {
             }
         }
     }
+    printf("Count all points\n");
     return g;
 }
 
