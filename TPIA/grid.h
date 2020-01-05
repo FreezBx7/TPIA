@@ -29,9 +29,12 @@ void isNeigbourAdversary(GRID g, int xPos, int yPos, char myColor);
 
 DIRECTION defineDIRECTION(int xPos, int yPos, int i, int j);
 
-void whereCanIPlay(GRID g, char myColor);
+GRID whereCanIPlay(GRID g, char myColor);
 
 void canIPlay(GRID g, DIRECTION dir, int xPos, int yPos, char myColor);
+
+/* Dev purposes do not use*/
+GRID insertIntoGRID(GRID g,int xPos,int yPos,char myColor);
 
 
 #endif // GRID_H_INCLUDED
