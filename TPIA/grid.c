@@ -95,7 +95,8 @@ void whereCanIPlay(GRID g, char myColor) {
                 }
         }
     }
-
+    printf("\n\nPRINT GTEMP GRID\n\n");
+    print_GRID(gTemp);
 
 }
 
@@ -176,7 +177,8 @@ DIRECTION defineDIRECTION(int xPos, int yPos, int i, int j){
 }
 
 void canIPlay(GRID g, DIRECTION dir, int xPos, int yPos, char myColor) {
-    printf("Where Am I : %d;%d My color : %c\t\n", xPos, yPos, myColor);
+    GRID possibilityGrid = copieGRID(g);
+    printf("START CAN I PLAY Where Am I : %d;%d My color : %c\t\n", xPos, yPos, myColor);
     char adversaryColor;
     if( myColor == 'W') {
         adversaryColor = 'B';
@@ -189,8 +191,8 @@ void canIPlay(GRID g, DIRECTION dir, int xPos, int yPos, char myColor) {
         printf("Where I Go : ");
         switch(dir)
         {
-            case NORTH : printf("North\n"); canIPlay(g, dir, xPos , yPos +1, myColor); break;
-            case SOUTH : printf("South\n"); canIPlay(g, dir, xPos , yPos -1, myColor); break;
+            case NORTH : printf("North\n"); canIPlay(g, dir, xPos , yPos -1, myColor); break;
+            case SOUTH : printf("South\n"); canIPlay(g, dir, xPos , yPos +1, myColor); break;
             case EAST : printf("East\n"); canIPlay(g, dir, xPos +1, yPos, myColor); break;
             case WEST : printf("West\n"); canIPlay(g, dir, xPos -1, yPos, myColor); break;
             case NE : printf("North East\n"); break;
@@ -206,12 +208,12 @@ void canIPlay(GRID g, DIRECTION dir, int xPos, int yPos, char myColor) {
             printf("Cant play its my color on %d,%d\n", xPos, yPos);
         } else {
             if(g.board[xPos][yPos] == '\0'){
-                printf("%d,%d is a Possibility\n", xPos, yPos);
-                g.board[xPos][yPos] == 'P';
+                printf("-----  %d,%d is a Possibility ----\n", xPos, yPos);
+                g.board[xPos][yPos] = 'P';
+            } else {
+                 printf("Error canIplay() %d, %d\n", xPos, yPos);
             }
-            printf("Error canIplay() %d, %d\n", xPos, yPos);
         }
     }
-
 }
 
