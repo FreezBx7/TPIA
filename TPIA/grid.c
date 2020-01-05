@@ -123,52 +123,52 @@ void isNeigbourAdversary(GRID g, int xPos, int yPos, char myColor) {
 DIRECTION defineDIRECTION(int xPos, int yPos, int i, int j){
     DIRECTION dir = NULL;
     printf("define Direction : Me : %d;%d, Where I want to go : %d,%d\n", xPos,yPos, i,j);
-    if(xPos - i == 1) {
-        if(yPos - j == 1) {
+    if(xPos - i >= 1) {
+        if(yPos - j >= 1) {
             dir = NW;
         } else {
-            if(yPos - j == -1) {
+            if(yPos - j <= -1) {
                 dir = NE;
             } else {
                 if(yPos - j == 0) {
                     dir = NORTH;
                 } else {
-                    printf("Error define Direction() %d,%d / %d,%d\n", xPos, yPos, i, j);
+                    printf("Error define Direction() %d,%d / %d,%d -> %d;%d\n", xPos, yPos, i, j,xPos - i, yPos-j);
                 }
             }
         }
 
     } else {
-        if(xPos - i == -1) {
+        if(xPos - i <= -1) {
 
-                if(yPos - j == 1) {
+                if(yPos - j >= 1) {
                     dir = SW;
                 } else {
-                    if(yPos - j == -1) {
+                    if(yPos - j <= -1) {
                         dir = SE;
                     } else {
                         if(yPos - j == 0) {
                             dir = SOUTH;
                         } else {
-                            printf("Error define Direction() %d,%d / %d,%d\n", xPos, yPos, i, j);
+                            printf("Error define Direction() %d,%d / %d,%d -> %d;%d\n", xPos, yPos, i, j,xPos - i, yPos-j);
                         }
                     }
                 }
 
         } else {
             if(xPos - i == 0) {
-                    if(yPos - j == 1) {
+                    if(yPos - j >= 1) {
                         dir = WEST;
                     } else {
-                        if(yPos - j == -1) {
+                        if(yPos - j <= -1) {
                             dir = EAST;
                         } else {
-                            printf("Error define Direction() %d,%d / %d,%d\n", xPos, yPos, i, j);
+                            printf("Error define Direction() %d,%d / %d,%d -> %d;%d\n", xPos, yPos, i, j,xPos - i, yPos-j);
                         }
                     }
 
             } else {
-             printf("Error define Direction() %d,%d / %d,%d\n", xPos, yPos, i, j);
+             printf("Error define Direction() %d,%d / %d,%d -> %d;%d\n", xPos, yPos, i, j,xPos - i, yPos-j);
             }
         }
     }
@@ -227,21 +227,24 @@ GRID insertIntoGRID(GRID g,int xPos,int yPos,char myColor){
     return g;
 }
 
+/* Check if a cell is a possibililty */
 bool checkPossibility(GRID gPossibility, int xPos, int yPos) {
-
-
-    if(gPossibility.board[xPos][yPos] == 'P') {
-        return true;
+    if(xPos > 1 && xPos < gPossibility.size_grid -1) {
+        if(yPos > 1 && yPos < gPossibility.size_grid -1) {
+            if(gPossibility.board[xPos][yPos] == 'P') {
+                return true;
+            }
+        }
     }
 
     return false;
 
 }
 
-play(GRID g, GRID gPossibility, char myColor) {
-    int xPos = -1;
-    int yPos = -1;
 
+GRID play(GRID g, GRID gPossibility, char myColor) {
+    int xPos = 0;
+    int yPos = 0;
     while (!checkPossibility(gPossibility,xPos,yPos)) {
         printf("Enter positions : line and column\n");
         scanf("%d", &xPos);
@@ -250,62 +253,89 @@ play(GRID g, GRID gPossibility, char myColor) {
 
     if(checkPossibility(gPossibility,xPos,yPos)) {
         // Toutes les valeurs entre xPos yPos et les diag ligne col deviennent my color
-        isThereMyColorLines(g,xPos,yPos,myColor);
+        printf("ISTHEREMYCOLOR\n\n");
+        g = isThereMyColor(g,xPos,yPos,myColor);
     }
+
+    return g;
 }
 
-void isThereMyColor(GRID g, int xPos, int yPos, char myColor) {
-    gTemp = copieGRID(g);
+GRID isThereMyColor(GRID g, int xPos, int yPos, char myColor) {
+    GRID gTemp = copieGRID(g);
     for(int a = xPos + 1; a <  g.size_grid - 1; a++) {
         if(g.board[a][yPos] == myColor) {
-            gTemp = changeColor(g,xPos+1,yPos,a,yPos,myColor);
+                printf("g.board[a][yPos] == myColor\n");
+            gTemp = changeColor(g,a,yPos,xPos+1,yPos,myColor);
+            break;
         }
     }
      for(int b = xPos - 1; b > 0; b--) {
         if(g.board[b][yPos] == myColor) {
+            printf("g.board[b][yPos] == myColor\n");
             gTemp = changeColor(g,xPos-1,yPos,b,yPos, myColor);
+            break;
         }
      }
      for(int c = yPos + 1; c < g.size_grid - 1; c++) {
         if(g.board[xPos][c] == myColor) {
+            printf("g.board[xPos][c] == myColor\n");
             gTemp = changeColor(g,xPos,yPos + 1,xPos,c, myColor);
+            break;
         }
      }
      for(int d = yPos - 1; d > 0; d--) {
         if(g.board[xPos][d] == myColor) {
+            printf("g.board[xPos][d] == myColor\n");
             gTemp = changeColor(g,xPos,yPos - 1,xPos,d, myColor);
+            break;
         }
      }
 
      for(int e = xPos + 1; e < g.size_grid - 1; e++) {
         for(int f = yPos + 1; f < g.size_grid - 1; f++) {
-            gTemp = changeColor(g,xPos + 1 ,yPos + 1,e,f, myColor);
+            if(g.board[e][f] == myColor) {
+                gTemp = changeColor(g,xPos + 1 ,yPos + 1,e,f, myColor);
+                break;
+            }
         }
      }
 
-     for(int h = xPos +1; h; g.size_grid - 1; h++){
-        for(int i = yPos - 1, i > 0; i--){
-            gTemp = changeColor(g,xPos + 1 ,yPos - 1,h,i, myColor);
+     for(int h = xPos +1; h < g.size_grid - 1; h++){
+        for(int i = yPos - 1; i > 0; i--){
+                if(g.board[h][i] == myColor){
+                    gTemp = changeColor(g,xPos + 1 ,yPos - 1,h,i, myColor);
+                    break;
+                }
+
         }
      }
 
      for(int j = xPos - 1; j > 0; j--) {
         for(int k = yPos +1; k < g.size_grid - 1; k++) {
-            gTemp = changeColor(g,xPos - 1 ,yPos + 1,j,k, myColor);
+                if(g.board[j][k] == myColor) {
+                    gTemp = changeColor(g,xPos - 1 ,yPos + 1,j,k, myColor);
+                    break;
+                }
+
         }
      }
 
      for(int l = xPos - 1; l > 0; l--) {
         for(int m = yPos - 1; m > 0; m--) {
-            gTemp = changeColor(g,xPos - 1 ,yPos - 1,l,m, myColor);
+                if(g.board[l][m] == myColor) {
+                    gTemp = changeColor(g,xPos - 1 ,yPos - 1,l,m, myColor);
+                    break;
+                }
         }
      }
-
+    printf("END OF \t\tISTHEREMYCOLOR\n\n");
+    return gTemp;
 
 }
 
 GRID changeColor(GRID g, int xFrom, int yFrom, int xTo, int yTo, char myColor) {
     DIRECTION dir = defineDIRECTION(xFrom, yFrom, xTo, yTo);
+    printf("CHANGECOLOR\n");
     switch(dir)
         {
             case NORTH : printf("North\n");
@@ -373,7 +403,7 @@ GRID changeColor(GRID g, int xFrom, int yFrom, int xTo, int yTo, char myColor) {
 }
 
 /* Returns true if there is a possibility false either */
-bool isThereAPossibility(GRID gPossibility) { // Vérifier les fors
+bool isThereAPossibility(GRID gPossibility) {
     for (int i = 1; i < gPossibility.size_grid - 1; i++) {
         for(int j = 0; j < gPossibility.size_grid - 1; j++ ) {
             if(gPossibility.board[i][j] == 'P') {

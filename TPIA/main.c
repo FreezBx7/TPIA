@@ -12,16 +12,8 @@ int main()
     gPossibility = whereCanIPlay(g,'B');
     printf("--------- Possibility Grid ---------\n");
     print_GRID(gPossibility);
-
-    for(int v = 0; v < 7; v++) {
-        for(int u = 0; u <  5; u++) {
-            printf("%d;%d\n", v,u);
-            if(u == 2) {
-
-                break;
-            }
-        }
-    }
+    play(g,gPossibility,'B');
+    print_GRID(g);
 
 
 
