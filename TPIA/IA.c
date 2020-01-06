@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdbool.h>
-
+/*
 int taille(Arbre noeud)
 {
     Arbre enfant;
@@ -12,19 +12,21 @@ int taille(Arbre noeud)
         compteur += taille(enfant);
     return compteur;
 }
-
+*/
 int hauteur(Arbre a){
     int h = 0;
     if(!a) h =1;
-    else{
-        printf("ok");
-        h=1+hauteur(a->enfant);
-    }
+    else
+        return 1+hauteur(a->enfant);
 
-
-    return h;
 }
+int taille(Arbre a){
+    int h = 0;
+    if(!a) h =1;
+    else
+        return 1+taille(a->frere)+taille(a->enfant);
 
+}
 Arbre creerNoeud(int n){
 
     Arbre a = NULL;
